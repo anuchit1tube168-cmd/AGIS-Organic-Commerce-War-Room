@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TikTok AI Seller Prompt Skill</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --panel: #111827;
+      --panel2: #171717;
+      --text: #f8fafc;
+      --muted: #a1a1aa;
+      --line: rgba(255,255,255,.12);
+      --brand: #8b5cf6;
+      --brand2: #06b6d4;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --radius: 22px;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,.35), transparent 32rem),
+        radial-gradient(circle at top right, rgba(6,182,212,.25), transparent 32rem),
+        var(--bg);
+      min-height: 100vh;
+    }
+    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 56px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .hero-main { padding: 34px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      color: #d8b4fe;
+      background: rgba(139,92,246,.12);
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    h1 { font-size: clamp(34px, 6vw, 64px); line-height: .95; margin: 0 0 16px; letter-spacing: -2px; }
+    h2 { margin: 0 0 14px; font-size: 22px; }
+    h3 { margin: 0 0 8px; font-size: 15px; color: #e4e4e7; }
+    p { color: var(--muted); line-height: 1.7; margin: 0; }
+    .hero-side { padding: 24px; display: grid; gap: 14px; }
+    .metric {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+    }
+    .metric strong { display: block; font-size: 28px; }
+    .grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 22px;
+      align-items: start;
+    }
+    .panel { padding: 24px; }
+    label { display: block; font-size: 13px; color: #d4d4d8; margin: 14px 0 7px; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.24);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 13px;
+      outline: none;
+      font-size: 14px;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: rgba(139,92,246,.8); box-shadow: 0 0 0 4px rgba(139,92,246,.12); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    button {
+      border: 0;
+      color: white;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 14px 34px rgba(139,92,246,.22);
+    }
+    button.secondary { background: rgba(255,255,255,.08); border: 1px solid var(--line); box-shadow: none; }
+    button.warn { background: rgba(245,158,11,.18); border: 1px solid rgba(245,158,11,.35); box-shadow: none; }
+    .output {
+      white-space: pre-wrap;
+      min-height: 520px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #050505;
+      color: #e5e7eb;
+      line-height: 1.65;
+      font-size: 14px;
+      overflow: auto;
+    }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .tab {
+      background: rgba(255,255,255,.07);
+      border: 1px solid var(--line);
+      color: #d4d4d8;
+      box-shadow: none;
+      padding: 9px 11px;
+      font-size: 13px;
+    }
+    .tab.active { background: linear-gradient(135deg, var(--brand), var(--brand2)); color: white; }
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .mini { padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.05); }
+    .mini b { display: block; margin-bottom: 7px; }
+    .footer { color: var(--muted); margin-top: 26px; text-align: center; font-size: 13px; }
+    @media (max-width: 900px) {
+      .hero, .grid, .row, .mini-grid { grid-template-columns: 1fr; }
+      .hero-main { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="badge">AGIS Organic Commerce War Room · Skill v1.0</div>
+        <h1>TikTok AI Seller Prompt Skill</h1>
+        <p>เครื่องมือกรอกข้อมูลสินค้า แล้วสร้าง Prompt, Hook, Script, Caption, CTA และ Checklist สำหรับทำคลิปขายของแบบ Organic Commerce ใช้กับ TikTok Shop, Shopee, Reels และ Shorts ได้ทันที</p>
+      </div>
+      <div class="card hero-side">
+        <div class="metric"><strong>30+</strong><p>แตกมุมคลิปจากสินค้าเดียว</p></div>
+        <div class="metric"><strong>3</strong><p>Script หลัก: 15 / 30 / 60 วินาที</p></div>
+        <div class="metric"><strong>Safe</strong><p>มี Guardrails กันเคลมเกินจริง</p></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card panel">
+        <h2>กรอกข้อมูลสินค้า</h2>
+        <p>กรอกเท่าที่มี ถ้าไม่ครบ ระบบจะสร้าง Prompt ให้ AI ถามต่อหรือเดาแบบมีสมมติฐาน</p>
+
+        <label>ชื่อสินค้า</label>
+        <input id="product" placeholder="เช่น กระบอกน้ำเก็บอุณหภูมิ" />
+
+        <div class="row">
+          <div>
+            <label>ราคา / โปรโมชัน</label>
+            <input id="price" placeholder="เช่น 199 บาท ซื้อ 2 ลด 10%" />
+          </div>
+          <div>
+            <label>แพลตฟอร์ม</label>
+            <select id="platform">
+              <option>TikTok Shop</option>
+              <option>Shopee Video</option>
+              <option>Facebook Reels</option>
+              <option>YouTube Shorts</option>
+              <option>LINE OA</option>
+            </select>
+          </div>
+        </div>
+
+        <label>กลุ่มเป้าหมาย</label>
+        <textarea id="audience" placeholder="ใครคือคนซื้อ เช่น คนทำงาน นักเรียน แม่บ้าน เจ้าของร้านออนไลน์"></textarea>
+
+        <label>Pain Point / ปัญหาลูกค้า</label>
+        <textarea id="pain" placeholder="ลูกค้าเจอปัญหาอะไร เช่น เสียเวลา ไม่มั่นใจ ซื้อผิดบ่อย"></textarea>
+
+        <label>จุดขาย / ประโยชน์</label>
+        <textarea id="benefit" placeholder="สินค้าแก้อะไรได้ มีจุดเด่นอะไร"></textarea>
+
+        <label>ข้อห้าม / คำที่ไม่ควรเคลม</label>
+        <textarea id="guard" placeholder="เช่น ห้ามพูดว่าหายแน่นอน รวยทันที ผอมทันที"></textarea>
+
+        <div class="row">
+          <div>
+            <label>โทนภาษา</label>
+            <select id="tone">
+              <option>จริงใจ เข้าใจง่าย</option>
+              <option>สนุก เป็นกันเอง</option>
+              <option>มืออาชีพ</option>
+              <option>หรูพรีเมียม</option>
+              <option>ทหาร วินัย ชัดเจน</option>
+            </select>
+          </div>
+          <div>
+            <label>CTA</label>
+            <select id="cta">
+              <option>กดตะกร้า</option>
+              <option>ทักแชต</option>
+              <option>กดลิงก์</option>
+              <option>ติดตาม</option>
+              <option>บันทึกไว้ดู</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button onclick="generate('master')">สร้าง Master Prompt</button>
+          <button class="secondary" onclick="generate('script')">สร้าง Script Pack</button>
+          <button class="secondary" onclick="generate('calendar')">สร้าง Calendar</button>
+          <button class="warn" onclick="clearForm()">ล้างข้อมูล</button>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <div class="tabs">
+          <button class="tab active" id="tabMaster" onclick="generate('master')">Master</button>
+          <button class="tab" id="tabScript" onclick="generate('script')">Script</button>
+          <button class="tab" id="tabCalendar" onclick="generate('calendar')">Calendar</button>
+        </div>
+        <div id="output" class="output">กรอกข้อมูลสินค้า แล้วกดสร้าง Prompt</div>
+        <div class="btns">
+          <button onclick="copyOutput()">Copy Output</button>
+          <button class="secondary" onclick="downloadText()">Download .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="mini-grid">
+      <div class="mini"><b>1. Product Brief</b><p>กรอกสินค้า กลุ่มเป้าหมาย Pain point จุดขาย และข้อห้าม</p></div>
+      <div class="mini"><b>2. AI Prompt</b><p>นำ Output ไปวางใน ChatGPT/Claude/Gemini เพื่อแตกงานต่อ</p></div>
+      <div class="mini"><b>3. Shoot & Post</b><p>ใช้ Script, Shot list, Caption และ Checklist ก่อนโพสต์จริง</p></div>
+    </section>
+
+    <div class="footer">AGIS Organic Commerce War Room · TikTok AI Seller Prompt Skill</div>
+  </main>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function data() {
+      return {
+        product: $('product').value || '[ชื่อสินค้า]',
+        price: $('price').value || '[ราคา/โปรโมชัน]',
+        platform: $('platform').value,
+        audience: $('audience').value || '[กลุ่มเป้าหมาย]',
+        pain: $('pain').value || '[Pain point]',
+        benefit: $('benefit').value || '[จุดขาย/ประโยชน์]',
+        guard: $('guard').value || '[ข้อห้าม/คำที่ห้ามเคลม]',
+        tone: $('tone').value,
+        cta: $('cta').value
+      };
+    }
+    function setTab(type) {
+      $('tabMaster').classList.toggle('active', type === 'master');
+      $('tabScript').classList.toggle('active', type === 'script');
+      $('tabCalendar').classList.toggle('active', type === 'calendar');
+    }
+    function generate(type) {
+      setTab(type);
+      const d = data();
+      let text = '';
+      if (type === 'master') {
+        text = `คุณคือ TikTok Commerce Strategist และ Prompt Engineer\n\nช่วยสร้างระบบคอนเทนต์ขายของจากข้อมูลนี้\n\nสินค้า: ${d.product}\nราคา/โปร: ${d.price}\nแพลตฟอร์ม: ${d.platform}\nกลุ่มเป้าหมาย: ${d.audience}\nPain point: ${d.pain}\nจุดขาย/ประโยชน์: ${d.benefit}\nโทนภาษา: ${d.tone}\nCTA: ${d.cta}\nข้อห้าม: ${d.guard}\n\nขอผลลัพธ์เป็นภาษาไทยแบบพร้อมใช้งาน:\n1. Audience Map\n2. Pain point 20 ข้อ\n3. มุมขาย 30 มุม\n4. Hook 50 แบบ\n5. Script คลิป 15/30/60 วินาที\n6. Shot list สำหรับถ่ายด้วยมือถือ\n7. Caption 10 แบบ\n8. CTA 10 แบบ\n9. Hashtag 30 คำ\n10. Compliance Check ว่ามีคำเคลมเกินจริงหรือไม่\n11. ตารางโพสต์ 7 วัน\n\nห้ามขายฝัน ห้ามเคลมเกินจริง และต้องทำให้คนดูรู้สึกว่าได้ประโยชน์ก่อนถูกขาย`; 
+      }
+      if (type === 'script') {
+        text = `สร้าง Script Pack สำหรับคลิปขายสินค้า\n\nสินค้า: ${d.product}\nกลุ่มเป้าหมาย: ${d.audience}\nPain point: ${d.pain}\nจุดขาย: ${d.benefit}\nแพลตฟอร์ม: ${d.platform}\nโทน: ${d.tone}\nCTA: ${d.cta}\nข้อห้าม: ${d.guard}\n\nขอ 10 คลิป โดยแต่ละคลิปมี:\n- ชื่อคลิป\n- Hook 3 วินาทีแรก\n- Script 15 วินาที\n- Script 30 วินาที\n- Script 60 วินาที\n- On-screen text\n- Shot list\n- Caption\n- CTA\n- Hashtag\n- จุดเสี่ยงที่ต้องระวัง\n\nให้เรียงคลิปตามโอกาสขายสูง + ถ่ายง่ายก่อน`; 
+      }
+      if (type === 'calendar') {
+        text = `ทำ Content Calendar 7 วันสำหรับสินค้า\n\nสินค้า: ${d.product}\nแพลตฟอร์มหลัก: ${d.platform}\nกลุ่มเป้าหมาย: ${d.audience}\nPain point: ${d.pain}\nจุดขาย: ${d.benefit}\nCTA: ${d.cta}\n\nขอเป็นตาราง 7 วัน วันละ 3 คลิป รวม 21 คลิป\nแต่ละคลิปต้องมี:\n- วันที่\n- เวลาโพสต์ที่แนะนำ\n- Content Pillar: Problem / How-to / Review / Compare / FAQ / Storytelling\n- ชื่อคลิป\n- Hook\n- Script สั้น\n- Shot list\n- Caption\n- CTA\n- Hashtag\n- KPI ที่ควรวัด\n- วิธีทำซ้ำถ้าคลิปชนะ\n\nเพิ่มแผน A/B Test Hook 3 แบบ และ CTA 3 แบบด้วย`; 
+      }
+      $('output').textContent = text;
+      localStorage.setItem('tiktok_ai_seller_last_output', text);
+    }
+    function copyOutput() {
+      navigator.clipboard.writeText($('output').textContent).then(() => alert('คัดลอกแล้ว'));
+    }
+    function downloadText() {
+      const blob = new Blob([$('output').textContent], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'tiktok-ai-seller-prompt.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    function clearForm() {
+      ['product','price','audience','pain','benefit','guard'].forEach(id => $(id).value = '');
+      $('output').textContent = 'กรอกข้อมูลสินค้า แล้วกดสร้าง Prompt';
+    }
+    const last = localStorage.getItem('tiktok_ai_seller_last_output');
+    if (last) $('output').textContent = last;
+  </script>
+</body>
+</html>
